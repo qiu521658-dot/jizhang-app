@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>记账本</title>
+  <meta name="description" content="轻量、离线可用的个人记账本">
+  <meta name="theme-color" content="#F4F1EA">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="记账本">
+
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="monthbar">
+      <div class="month-nav">
+        <button class="icon-btn" id="prevMonth" aria-label="上个月">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
+        </button>
+        <button class="month-label" id="monthLabel" aria-label="选择月份">2026年10月</button>
+        <button class="icon-btn" id="nextMonth" aria-label="下个月">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg>
+        </button>
+      </div>
+      <button class="today-chip" id="backToday" hidden>回到本月</button>
+    </header>
+
+    <main id="view" class="view" aria-live="polite"></main>
+  </div>
+
+  <nav class="tabbar" aria-label="主导航">
+    <button class="tab active" data-tab="home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5.5h-5V21H5a1 1 0 0 1-1-1z"/></svg>
+      <span>首页</span>
+    </button>
+    <button class="tab" data-tab="detail">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>
+      <span>明细</span>
+    </button>
+    <button class="tab" data-tab="stats">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.4A9 9 0 0 1 20.6 9H15z"/></svg>
+      <span>统计</span>
+    </button>
+    <button class="tab" data-tab="me">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20c.7-3.6 3.5-5.6 7.2-5.6s6.5 2 7.2 5.6"/></svg>
+      <span>我的</span>
+    </button>
+  </nav>
+
+  <button class="fab" id="fab" aria-label="记一笔">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+    <span>记一笔</span>
+  </button>
+
+  <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+
+  <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="记一笔" hidden>
+    <div class="sheet-grabber" aria-hidden="true"></div>
+    <header class="sheet-head">
+      <button class="icon-btn sheet-close" id="sheetClose" aria-label="关闭">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="segmented" role="group" aria-label="收支类型">
+        <button class="seg active" data-type="expense" type="button">支出</button>
+        <button class="seg" data-type="income" type="button">收入</button>
+      </div>
+      <button class="save-btn" id="saveBtn" type="button" disabled>保存</button>
+    </header>
+
+    <div class="sheet-body">
+      <div class="amount-line" id="amountLine">
+        <span class="yen">¥</span><span class="amount-text" id="amountText">0</span>
+      </div>
+
+      <div class="cats" id="catGrid" role="group" aria-label="分类"></div>
+
+      <div class="meta-rows">
+        <label class="meta-row">
+          <span class="meta-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="3"/><path d="M8 3.5v4M16 3.5v4M4 10h16"/></svg>
+          </span>
+          <span class="meta-text" id="dateLabel">今天</span>
+          <input type="date" id="dateInput" aria-label="日期">
+        </label>
+        <label class="meta-row">
+          <span class="meta-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 4.5h14v15H5z"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4"/></svg>
+          </span>
+          <input type="text" id="noteInput" maxlength="30" placeholder="备注（可选）" aria-label="备注">
+        </label>
+      </div>
+
+      <div class="keypad" id="keypad"></div>
+      <button class="delete-btn" id="deleteBtn" type="button" hidden>删除这笔</button>
+    </div>
+  </section>
+
+  <div class="toast" id="toast" hidden>
+    <span id="toastText"></span>
+    <button class="toast-undo" id="toastUndo" type="button" hidden>撤销</button>
+  </div>
+
+  <input type="file" id="importFile" accept="application/json,.json" hidden>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>
