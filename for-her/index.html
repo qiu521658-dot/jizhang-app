@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffe9ef">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <title>给某位小朋友的小页面</title>
+  <style>
+    :root {
+      --ink: #5d4149;
+      --ink-soft: #73545d;
+      --rose: #b85d75;
+      --rose-deep: #a74760;
+      --pink: #ff8eab;
+      --pink-deep: #ff7397;
+      --cream: #fffaf7;
+      --line: rgba(185, 111, 131, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      min-height: 100%;
+      background: #ffe9ef;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+        "HarmonyOS Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      background:
+        radial-gradient(120% 80% at 12% 8%, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0) 46%),
+        radial-gradient(95% 70% at 90% 18%, rgba(255, 202, 218, 0.65) 0%, rgba(255, 202, 218, 0) 62%),
+        radial-gradient(90% 75% at 50% 100%, rgba(255, 181, 201, 0.52) 0%, rgba(255, 181, 201, 0) 66%),
+        linear-gradient(165deg, #fff7f8 0%, #ffeaf0 45%, #ffdbe6 100%);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(2px);
+    }
+
+    body::before {
+      width: 230px;
+      height: 230px;
+      left: -95px;
+      top: 16%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0) 68%);
+    }
+
+    body::after {
+      width: 300px;
+      height: 300px;
+      right: -150px;
+      bottom: 2%;
+      background: radial-gradient(circle, rgba(255, 158, 184, 0.24), rgba(255, 158, 184, 0) 70%);
+    }
+
+    button {
+      font: inherit;
+      border: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .sky {
+      position: fixed;
+      z-index: 1;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .sky span {
+      position: absolute;
+      bottom: -8vh;
+      line-height: 1;
+      opacity: 0;
+      filter: blur(0.1px);
+      animation: drift linear infinite;
+      will-change: transform, opacity;
+    }
+
+    @keyframes drift {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(0deg);
+      }
+      12% {
+        opacity: var(--peak, 0.42);
+      }
+      78% {
+        opacity: var(--peak, 0.42);
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--drift-x, 18px), -118vh, 0) rotate(26deg);
+      }
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding:
+        max(22px, env(safe-area-inset-top))
+        16px
+        calc(24px + env(safe-area-inset-bottom));
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      padding: 24px 22px 18px;
+      overflow: hidden;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      border-radius: 30px;
+      background: rgba(255, 251, 249, 0.82);
+      box-shadow:
+        0 30px 70px -28px rgba(167, 71, 96, 0.35),
+        0 8px 24px rgba(167, 71, 96, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(22px) saturate(1.08);
+      -webkit-backdrop-filter: blur(22px) saturate(1.08);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -90px;
+      left: 50%;
+      width: 280px;
+      height: 190px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 197, 213, 0.5), rgba(255, 197, 213, 0) 68%);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .bunny-wrap {
+      position: relative;
+      width: 168px;
+      height: 158px;
+      margin: -8px auto 0;
+    }
+
+    .bunny-wrap::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 26px 18px 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 157, 182, 0.3), rgba(255, 157, 182, 0) 70%);
+      animation: glow 4.2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { transform: scale(0.92); opacity: 0.65; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .bunny {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      transform-origin: 50% 92%;
+      animation: sway 4.4s ease-in-out infinite;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: translateY(0) rotate(-1.1deg); }
+      50% { transform: translateY(-5px) rotate(1.1deg); }
+    }
+
+    .bunny.happy {
+      animation: happyBounce 0.65s cubic-bezier(0.22, 0.9, 0.3, 1);
+    }
+
+    @keyframes happyBounce {
+      0% { transform: translateY(0) scale(1); }
+      32% { transform: translateY(-13px) scale(1.04, 0.97); }
+      60% { transform: translateY(0) scale(0.97, 1.04); }
+      80% { transform: translateY(-4px) scale(1.01, 0.99); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .bunny.shy {
+      animation: shyTilt 0.8s ease;
+    }
+
+    @keyframes shyTilt {
+      0% { transform: rotate(0deg); }
+      30% { transform: rotate(-4deg) translateY(1px); }
+      65% { transform: rotate(3deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .kicker {
+      margin: 2px 0 6px;
+      color: #c27a8d;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 15px;
+      color: #573b43;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.45;
+    }
+
+    .copy {
+      color: var(--ink-soft);
+      font-size: 15.5px;
+      line-height: 1.95;
+      letter-spacing: 0.01em;
+    }
+
+    .copy p {
+      margin: 0 0 8px;
+    }
+
+    .question {
+      display: inline-block;
+      margin: 5px 0 0;
+      padding: 9px 15px;
+      border: 1px solid rgba(255, 202, 216, 0.8);
+      border-radius: 14px;
+      background: rgba(255, 242, 246, 0.86);
+      color: var(--rose-deep);
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .buttons {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      width: 100%;
+      min-height: 51px;
+      padding: 13px 18px;
+      border-radius: 17px;
+      font-size: 15.5px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.975);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid rgba(255, 123, 155, 0.35);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      color: #fffdfd;
+      background: linear-gradient(135deg, #ff9db7 0%, #ff7fa2 62%, #ff7198 100%);
+      box-shadow:
+        0 12px 24px -10px rgba(207, 77, 110, 0.58),
+        inset 0 1px 0 rgba(255, 255, 255, 0.36);
+    }
+
+    .btn-primary:active {
+      box-shadow: 0 7px 15px -9px rgba(207, 77, 110, 0.5);
+    }
+
+    .btn-secondary {
+      min-height: 46px;
+      color: #b05d73;
+      border: 1px solid rgba(220, 154, 171, 0.38);
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .btn-secondary:active {
+      background: rgba(255, 246, 249, 0.92);
+    }
+
+    .response {
+      margin-top: 14px;
+      padding: 13px 15px;
+      border: 1px solid rgba(255, 213, 225, 0.8);
+      border-radius: 16px;
+      background: rgba(255, 246, 249, 0.9);
+      color: #a14f66;
+      font-size: 14.5px;
+      line-height: 1.75;
+      opacity: 0;
+      transform: translateY(7px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .response.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .signature {
+      margin: 17px 0 0;
+      color: #c29aa5;
+      font-size: 10.5px;
+      line-height: 1.6;
+      letter-spacing: 0.02em;
+    }
+
+    .signature::before {
+      content: "♡";
+      margin-right: 4px;
+      color: #d792a5;
+    }
+
+    .heart-layer {
+      position: fixed;
+      z-index: 9;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .burst-heart {
+      position: absolute;
+      left: 50%;
+      top: 49%;
+      color: var(--heart-color, #ff7d9f);
+      font-size: var(--heart-size, 18px);
+      line-height: 1;
+      text-shadow: 0 4px 10px rgba(193, 78, 108, 0.16);
+      animation: burst 1.25s cubic-bezier(0.16, 0.8, 0.3, 1) forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes burst {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.35) rotate(0deg);
+      }
+      18% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(
+            calc(-50% + var(--heart-x, 0px)),
+            calc(-50% + var(--heart-y, -110px))
+          )
+          scale(1.12) rotate(var(--heart-r, 18deg));
+      }
+    }
+
+    @media (max-width: 360px) {
+      .card {
+        padding: 20px 17px 16px;
+        border-radius: 26px;
+      }
+      .bunny-wrap {
+        width: 148px;
+        height: 140px;
+      }
+      h1 {
+        font-size: 19px;
+      }
+      .copy {
+        font-size: 14.5px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sky span,
+      .bunny,
+      .bunny-wrap::before {
+        animation: none !important;
+      }
+      .burst-heart {
+        animation-duration: 0.01ms !important;
+      }
+      .response {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky" id="sky" aria-hidden="true"></div>
+
+  <main class="page">
+    <section class="card" aria-labelledby="pageTitle">
+      <div class="bunny-wrap" aria-hidden="true">
+        <svg class="bunny" id="bunny" viewBox="0 0 240 220" role="img">
+          <defs>
+            <linearGradient id="heartFill" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffa4bb"/>
+              <stop offset="1" stop-color="#ff6e94"/>
+            </linearGradient>
+            <linearGradient id="furFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fffdfb"/>
+              <stop offset="1" stop-color="#fff3ef"/>
+            </linearGradient>
+          </defs>
+
+          <ellipse cx="120" cy="204" rx="54" ry="8" fill="#d9a0af" opacity="0.28"/>
+
+          <g transform="rotate(-11 94 64)">
+            <ellipse cx="94" cy="64" rx="17" ry="47" fill="url(#furFill)" stroke="#b67b86" stroke-width="3"/>
+            <ellipse cx="94" cy="69" rx="7.5" ry="31" fill="#ffd0dc"/>
+          </g>
+          <g transform="rotate(11 146 64)">
+            <ellipse cx="146" cy="64" rx="17" ry="47" fill="url(#furFill)" stroke="#b67b86" stroke-width="3"/>
+            <ellipse cx="146" cy="69" rx="7.5" ry="31" fill="#ffd0dc"/>
+          </g>
+
+          <ellipse cx="120" cy="170" rx="47" ry="42" fill="url(#furFill)" stroke="#b67b86" stroke-width="3"/>
+
+          <path d="M91 158 C82 166 86 179 100 179" fill="none" stroke="#b67b86" stroke-width="3" stroke-linecap="round"/>
+          <path d="M149 158 C158 166 154 179 140 179" fill="none" stroke="#b67b86" stroke-width="3" stroke-linecap="round"/>
+
+          <path d="M120 190 C107 179 96 172 96 162 C96 152 110 149 120 160 C130 149 144 152 144 162 C144 172 133 179 120 190Z"
+                fill="url(#heartFill)" stroke="#e35d80" stroke-width="2" stroke-linejoin="round"/>
+
+          <ellipse cx="100" cy="177" rx="10" ry="7" fill="#fffdfb" stroke="#b67b86" stroke-width="2.5" transform="rotate(-16 100 177)"/>
+          <ellipse cx="140" cy="177" rx="10" ry="7" fill="#fffdfb" stroke="#b67b86" stroke-width="2.5" transform="rotate(16 140 177)"/>
+
+          <circle cx="120" cy="127" r="51" fill="url(#furFill)" stroke="#b67b86" stroke-width="3"/>
+
+          <circle cx="102" cy="125" r="4" fill="#65464d"/>
+          <circle cx="138" cy="125" r="4" fill="#65464d"/>
+          <circle cx="103.5" cy="123.5" r="1.2" fill="#fff"/>
+          <circle cx="139.5" cy="123.5" r="1.2" fill="#fff"/>
+
+          <ellipse cx="85" cy="139" rx="9" ry="5" fill="#ffb6c8" opacity="0.72"/>
+          <ellipse cx="155" cy="139" rx="9" ry="5" fill="#ffb6c8" opacity="0.72"/>
+
+          <path d="M118 137 Q120 140 122 137" fill="none" stroke="#b67b86" stroke-width="2" stroke-linecap="round"/>
+          <path d="M114 143 Q120 149 126 143" fill="none" stroke="#b67b86" stroke-width="2" stroke-linecap="round"/>
+
+          <path d="M164 137 l2.6 5.5 5.9.7 -4.3 4.1 1.1 5.9 -5.3-3 -5.3 3 1.1-5.9 -4.3-4.1 5.9-.7Z"
+                fill="#ffd47e" opacity="0.95"/>
+        </svg>
+      </div>
+
+      <p class="kicker">TO 某位小朋友</p>
+      <h1 id="pageTitle">给某位小朋友的小页面</h1>
+
+      <div class="copy">
+        <p>本来想好好哄你的，<br>结果发现我好像不太会哄人。</p>
+        <p>但是不想看你不开心，<br>所以偷偷做了这个给你。</p>
+        <p class="question">今天可以不生气了吗？</p>
+      </div>
+
+      <div class="buttons">
+        <button class="btn btn-primary" id="forgive" type="button" aria-controls="response">
+          好啦，原谅你了
+        </button>
+        <button class="btn btn-secondary" id="think" type="button" aria-controls="response">
+          再考虑一下
+        </button>
+      </div>
+
+      <p class="response" id="response" aria-live="polite"></p>
+
+      <p class="signature">制作人：一个不太会哄人但有认真想办法的人。</p>
+    </section>
+  </main>
+
+  <div class="heart-layer" id="heartLayer" aria-hidden="true"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const bunny = document.getElementById("bunny");
+      const response = document.getElementById("response");
+      const forgiveness = document.getElementById("forgive");
+      const think = document.getElementById("think");
+      const heartLayer = document.getElementById("heartLayer");
+      const sky = document.getElementById("sky");
+      let moodTimer = 0;
+
+      // 背景里慢慢飘过的小爱心和星星，数量少一点，保持安静。
+      const symbols = ["♡", "♥", "✦", "✧"];
+      const colors = ["#e9a2b3", "#f3bcc9", "#e7c281", "#d9a0b2"];
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!reduceMotion) {
+        for (let i = 0; i < 13; i++) {
+          const item = document.createElement("span");
+          const size = 9 + Math.random() * 10;
+          item.textContent = symbols[i % symbols.length];
+          item.style.left = `${4 + Math.random() * 92}%`;
+          item.style.fontSize = `${size}px`;
+          item.style.color = colors[i % colors.length];
+          item.style.animationDuration = `${13 + Math.random() * 10}s`;
+          item.style.animationDelay = `${-Math.random() * 16}s`;
+          item.style.setProperty("--drift-x", `${-24 + Math.random() * 48}px`);
+          item.style.setProperty("--peak", `${0.2 + Math.random() * 0.24}`);
+          sky.appendChild(item);
+        }
+      }
+
+      function showResponse(text, mood) {
+        response.textContent = text;
+        response.hidden = false;
+        response.classList.remove("show");
+        // 强制浏览器重新计算，让每次点击都能重新播放淡入。
+        void response.offsetWidth;
+        response.classList.add("show");
+
+        bunny.classList.remove("happy", "shy");
+        void bunny.offsetWidth;
+        bunny.classList.add(mood);
+
+        window.clearTimeout(moodTimer);
+        moodTimer = window.setTimeout(() => {
+          bunny.classList.remove(mood);
+        }, 1200);
+      }
+
+      function burstHearts(count) {
+        if (reduceMotion) return;
+        const colors = ["#ff7d9f", "#ff9db7", "#ffc2d0", "#ffd47e", "#e98aa5"];
+        for (let i = 0; i < count; i++) {
+          const heart = document.createElement("span");
+          heart.className = "burst-heart";
+          heart.textContent = i % 3 === 0 ? "♡" : "♥";
+          heart.style.setProperty("--heart-x", `${-115 + Math.random() * 230}px`);
+          heart.style.setProperty("--heart-y", `${-155 + Math.random() * 85}px`);
+          heart.style.setProperty("--heart-r", `${-38 + Math.random() * 76}deg`);
+          heart.style.setProperty("--heart-size", `${12 + Math.random() * 13}px`);
+          heart.style.setProperty("--heart-color", colors[i % colors.length]);
+          heart.style.animationDelay = `${Math.random() * 0.12}s`;
+          heartLayer.appendChild(heart);
+          window.setTimeout(() => heart.remove(), 1550);
+        }
+      }
+
+      forgiveness.addEventListener("click", () => {
+        showResponse("嘿嘿，那就好。今天也要开开心心的。", "happy");
+        burstHearts(18);
+      });
+
+      think.addEventListener("click", () => {
+        showResponse("好吧，那我继续努力表现一下。", "shy");
+      });
+    })();
+  </script>
+</body>
+</html>
